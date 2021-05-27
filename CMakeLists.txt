@@ -146,20 +146,21 @@ else()
 
 endif()
 
-# Store the git hash of the current head
-if(EXISTS "${MYPROJECT_SOURCE_DIR}/.git/HEAD")
-  file(READ "${MYPROJECT_SOURCE_DIR}/.git/HEAD" MYPROJECT_SOURCE_VERSION)
-  if("${MYPROJECT_SOURCE_VERSION}" MATCHES "^ref:")
-    string(REGEX REPLACE "^ref: *([^ \n\r]*).*" "\\1"
-      MYPROJECT_GIT_REF "${MYPROJECT_SOURCE_VERSION}")
-    file(READ "${MYPROJECT_SOURCE_DIR}/.git/${MYPROJECT_GIT_REF}"
-      MYPROJECT_SOURCE_VERSION)
-  endif()
-  string(STRIP "${MYPROJECT_SOURCE_VERSION}" MYPROJECT_SOURCE_VERSION)
-endif()
+# Store the git hash of the current head (not working in top directory)
+#if(EXISTS "${MYPROJECT_SOURCE_DIR}/.git/HEAD")
+#  file(READ "${MYPROJECT_SOURCE_DIR}/.git/HEAD" MYPROJECT_SOURCE_VERSION)
+#  if("${MYPROJECT_SOURCE_VERSION}" MATCHES "^ref:")
+#    string(REGEX REPLACE "^ref: *([^ \n\r]*).*" "\\1"
+#      MYPROJECT_GIT_REF "${MYPROJECT_SOURCE_VERSION}")
+#    file(READ "${MYPROJECT_SOURCE_DIR}/.git/${MYPROJECT_GIT_REF}"
+#      MYPROJECT_SOURCE_VERSION)
+#  endif()
+#  string(STRIP "${MYPROJECT_SOURCE_VERSION}" MYPROJECT_SOURCE_VERSION)
+#endif()
 
-string(TIMESTAMP MYPROJECT_BUILD_TIME "%H:%M:%S" UTC)
-string(TIMESTAMP MYPROJECT_BUILD_DATE "%d %B %Y" UTC)
+# Not working here????
+#string(TIMESTAMP MYPROJECT_BUILD_TIME "%H:%M:%S" UTC)
+#string(TIMESTAMP MYPROJECT_BUILD_DATE "%d %B %Y" UTC)
 
 if(Module_vtkMYPROJECT)
   set(MYPROJECT_BIN_DIR ${VTK_INSTALL_RUNTIME_DIR})

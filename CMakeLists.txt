@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.0)
 
 project(MYPROJECT)
 
@@ -19,9 +19,9 @@ set(MYPROJECT_VERSION "${MYPROJECT_SHORT_VERSION}.${MYPROJECT_PATCH_VERSION}")
 set(MYPROJECT_TWEAK_VERSION ${timestring})
 
 # Include directories
-#set(DICOM_INCLUDE_DIRS
-#  "${DICOM_SOURCE_DIR}/Source"
-#  "${DICOM_BINARY_DIR}/Source")
+set(MYPROJECT_INCLUDE_DIRS
+  "${MYPROJECT_SOURCE_DIR}/Source"
+  "${MYPROJECT_BINARY_DIR}/Source")
 
 # Is this CMakeLists.txt file being called directly by cmake?
 if("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
@@ -66,7 +66,7 @@ else()
   # We are being built as a stand-alone package
   set(VTK_MYPROJECT_LINK_TARGET vtkMYPROJECT)
 
-  option(BUILD_SHARED_LIBS "Build shared libraries." ON)
+  option(BUILD_SHARED_LIBS "Build shared libraries." OFF)
 
   # Which parts of the package to build
   option(BUILD_TESTING "Build the tests" OFF)
@@ -160,7 +160,6 @@ endif()
 
 string(TIMESTAMP MYPROJECT_BUILD_TIME "%H:%M:%S" UTC)
 string(TIMESTAMP MYPROJECT_BUILD_DATE "%d %B %Y" UTC)
-
 
 if(Module_vtkMYPROJECT)
   set(MYPROJECT_BIN_DIR ${VTK_INSTALL_RUNTIME_DIR})

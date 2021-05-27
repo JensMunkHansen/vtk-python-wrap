@@ -5,9 +5,10 @@ set(MYPROJECT_BUILD_TESTING ${BUILD_TESTING})
 set(MYPROJECT_OVERRIDE " override")
 set(MYPROJECT_DELETE " = delete")
 
-configure_file(${MYPROJECT_CMAKE_DIR}/vtkMYPROJECTConfig.h.in
+configure_file("${MYPROJECT_CMAKE_DIR}/vtkMYPROJECTConfig.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/vtkMYPROJECTConfig.h" @ONLY)
-configure_file(${MYPROJECT_CMAKE_DIR}/vtkMYPROJECTBuild.h.in
+
+configure_file("${MYPROJECT_CMAKE_DIR}/vtkMYPROJECTBuild.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/vtkMYPROJECTBuild.h" @ONLY)
 
 # Include directories
@@ -66,5 +67,5 @@ if(DEFINED VTK_MODULE_ENABLE_VTK_MYPROJECT)
     SOURCES ${LIB_SRCS} ${LIB_SPECIAL}
     HEADERS ${LIB_SRC_HDRS} ${LIB_HDRS})
   vtk_module_link(VTK::MYPROJECT
-    PRIVATE ${GDCM_LIBS} ${DCMTK_LIBS} ${SQLITE_LIBS})
+    PRIVATE )
 endif()

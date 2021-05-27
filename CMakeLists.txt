@@ -13,12 +13,15 @@ string(TIMESTAMP timestring %Y%m%d%H%M%S UTC)
 set(MYPROJECT_MAJOR_VERSION 0)
 set(MYPROJECT_MINOR_VERSION 7)
 set(MYPROJECT_PATCH_VERSION 0)
+set(MYPROJECT_SHORT_VERSION "${MYPROJECT_MAJOR_VERSION}.${MYPROJECT_MINOR_VERSION}")
+set(MYPROJECT_VERSION "${MYPROJECT_SHORT_VERSION}.${MYPROJECT_PATCH_VERSION}")
+
 set(MYPROJECT_TWEAK_VERSION ${timestring})
 
 # Include directories
-set(DICOM_INCLUDE_DIRS
-  "${DICOM_SOURCE_DIR}/src"
-  "${DICOM_BINARY_DIR}/src")
+#set(DICOM_INCLUDE_DIRS
+#  "${DICOM_SOURCE_DIR}/Source"
+#  "${DICOM_BINARY_DIR}/Source")
 
 # Is this CMakeLists.txt file being called directly by cmake?
 if("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
@@ -105,7 +108,7 @@ else()
     set(VTK_MYPROJECT_LINK_TARGET VTK::MYPROJECT)
 
     vtk_module_scan(
-      MODULE_FILES        "${CMAKE_CURRENT_SOURCE_DIR}/src/myproject.module"
+      MODULE_FILES        "${CMAKE_CURRENT_SOURCE_DIR}/Source/myproject.module"
       REQUEST_MODULES     "VTK::MYPROJECT"
       PROVIDES_MODULES    myproject_modules
       ENABLE_TESTS        "${BUILD_TESTING}")
@@ -155,32 +158,9 @@ if(EXISTS "${MYPROJECT_SOURCE_DIR}/.git/HEAD")
   string(STRIP "${MYPROJECT_SOURCE_VERSION}" MYPROJECT_SOURCE_VERSION)
 endif()
 
-# TODO: Replace with above
+string(TIMESTAMP MYPROJECT_BUILD_TIME "%H:%M:%S" UTC)
+string(TIMESTAMP MYPROJECT_BUILD_DATE "%d %B %Y" UTC)
 
-# Store the build date
-if(WIN32)
-#  TODO: Use what is used for tweak version
-#  execute_process(COMMAND "cmd" " /c date /t" OUTPUT_VARIABLE DATE)
-#  string(REGEX REPLACE "[^0-9]*(..).*" "\\1" MONTH "${DATE}")
-#  set(MONTHS ""
-#    "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec")
-#  list(GET MONTHS "${MONTH}" MONTH)
-#  string(REGEX REPLACE "[^/]*/(..)/(....).*" "\\1 ${MONTH} \\2"
-#    MYPROJECT_BUILD_DATE "${DATE}")
-#  execute_process(COMMAND "cmd" " /c echo %TIME%" OUTPUT_VARIABLE TIME)
-#  string(REGEX REPLACE "[^0-9]*(..:..:..).*" "\\1"
-#    MYPROJECT_BUILD_TIME "${TIME}")
-else()
-  execute_process(COMMAND "date" "+%d %b %Y/%H:%M:%S"
-    OUTPUT_VARIABLE DATE_TIME)
-  string(REGEX REPLACE "([^/]*)/.*" "\\1"
-    MYPROJECT_BUILD_DATE "${DATE_TIME}")
-  string(REGEX REPLACE "[^/]*/([0-9:]*).*" "\\1"
-    MYPROJECT_BUILD_TIME "${DATE_TIME}")
-endif()
-
-message(${MYPROJECT_TWEAK_VERSION})
-message(${MYPROJECT_BUILD_TIME})
 
 if(Module_vtkMYPROJECT)
   set(MYPROJECT_BIN_DIR ${VTK_INSTALL_RUNTIME_DIR})
@@ -247,17 +227,16 @@ endif()
 
 if(NOT MYPROJECT_EXTERNAL_BUILD OR NOT DEFINED VTK_MODULE_ENABLE_VTK_MYPROJECT)
   # The main library, if not handled by the VTK 9 functions
-  add_subdirectory(src) # Rename to Source
+  add_subdirectory(Source)
 endif()
 
 # Subdirectories
 if(BUILD_PROGRAMS)
-  add_subdirectory(DicomCli) # Command-line interface programs
-  add_subdirectory(Programs)
+  # add_subdirectory(Programs)
 endif()
 
 if(BUILD_EXAMPLES)
-  add_subdirectory(Examples)
+  # add_subdirectory(Examples)
 endif()
 
 if(MYPROJECT_EXTERNAL_BUILD OR NOT DEFINED VTK_MODULE_ENABLE_VTK_MYPROJECT)

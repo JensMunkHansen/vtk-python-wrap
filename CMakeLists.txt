@@ -71,13 +71,13 @@ else()
   option(BUILD_EXAMPLES "Build the examples" OFF)
 
   # Wrap Python option
-  if(1)#VTK_WRAP_PYTHON)
+  if(VTK_WRAP_PYTHON)
     option(BUILD_PYTHON_WRAPPERS "Build python wrappers" ON)
   else()
     unset(BUILD_PYTHON_WRAPPERS CACHE)
   endif()
 
-  # Defines CMAKE_INSTALL_LIBDIR etcetera
+  # Defines CMAKE_INSTALL_LIBDIR
   include(GNUInstallDirs)
 
   # Set up our directory structure for output libraries and binaries
@@ -235,61 +235,6 @@ if(NOT Module_vtkMYPROJECT)
   endif()
 endif()
 
-if(NOT Module_vtkMYPROJECT AND VTK_VERSION VERSION_LESS 8.90)
-  # REMOTE THIS
-
-  # External wrapping previous to VTK 9
-
-  set(VTK_WRAP_INCLUDE_DIRS
-    ${MYPROJECT_INCLUDE_DIRS}
-    ${VTK_WRAP_INCLUDE_DIRS})
-
-  # For the python wrappers
-  if(BUILD_PYTHON_WRAPPERS)
-    if(TARGET vtkCommonCorePythonD OR
-       TARGET vtkCommonKitPythonD OR
-       TARGET vtkCommonPythonD)
-      set(MYPROJECT_PYTHON_LIBRARIES vtkMYPROJECTPythonD)
-    endif()
-  endif()
-
-  # For the tcl wrappers
-  if(BUILD_TCL_WRAPPERS)
-    find_package(TCL REQUIRED)
-    set(MYPROJECT_TCL_LIBRARIES vtkMYPROJECTTCL)
-  endif()
-
-  # For the java wrappers
-  if(BUILD_JAVA_WRAPPERS)
-    find_package(Java REQUIRED)
-    find_package(JNI REQUIRED)
-
-    if(NOT VTK_JAVA_SOURCE_VERSION)
-      set(VTK_JAVA_SOURCE_VERSION "1.6" CACHE STRING "javac source version")
-      mark_as_advanced(VTK_JAVA_SOURCE_VERSION)
-    endif()
-    if(NOT VTK_JAVA_TARGET_VERSION)
-      set(VTK_JAVA_TARGET_VERSION "1.6" CACHE STRING "javac target version")
-      mark_as_advanced(VTK_JAVA_TARGET_VERSION)
-    endif()
-
-    if(APPLE)
-      set(JAVAC_OPTIONS -J-Xmx512m)
-    endif()
-    if(NOT VTK_JAR_PATH)
-      set(VTK_JAR_PATH "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-    endif()
-    find_file(VTK_JAVA_JAR NAMES vtk.jar vtk6.jar vtk5.jar
-      PATHS ${vtkWrappingJava_RUNTIME_LIBRARY_DIRS})
-    if(NOT VTK_JAVA_JAR)
-      message(FATAL_ERROR "VTK_JAVA_JAR must be set to the location of vtk.jar")
-    endif()
-
-    set(MYPROJECT_JAVA_LIBRARIES vtkMYPROJECTJava)
-  endif()
-
-endif() # NOT Module_vtkMYPROJECT)
-
 # Disable C and C++ deprecation warnings for MSVC 2005 and later
 if(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400 OR MSVC10)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE
@@ -299,12 +244,12 @@ endif()
 
 if(NOT MYPROJECT_EXTERNAL_BUILD OR NOT DEFINED VTK_MODULE_ENABLE_VTK_MYPROJECT)
   # The main library, if not handled by the VTK 9 functions
-  add_subdirectory(src)
+  add_subdirectory(src) # Rename to Source
 endif()
 
 # Subdirectories
 if(BUILD_PROGRAMS)
-  add_subdirectory(DicomCli)
+  add_subdirectory(DicomCli) # Command-line interface programs
   add_subdirectory(Programs)
 endif()
 

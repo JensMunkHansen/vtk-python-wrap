@@ -18,6 +18,21 @@ set(MYPROJECT_VERSION "${MYPROJECT_SHORT_VERSION}.${MYPROJECT_PATCH_VERSION}")
 
 set(MYPROJECT_TWEAK_VERSION ${timestring})
 
+# Store the git hash of the current head (not working in top directory)
+if(EXISTS "${MYPROJECT_SOURCE_DIR}/.git/HEAD")
+  file(READ "${MYPROJECT_SOURCE_DIR}/.git/HEAD" MYPROJECT_SOURCE_VERSION)
+  if("${MYPROJECT_SOURCE_VERSION}" MATCHES "^ref:")
+    string(REGEX REPLACE "^ref: *([^ \n\r]*).*" "\\1"
+      MYPROJECT_GIT_REF "${MYPROJECT_SOURCE_VERSION}")
+    file(READ "${MYPROJECT_SOURCE_DIR}/.git/${MYPROJECT_GIT_REF}"
+      MYPROJECT_SOURCE_VERSION)
+  endif()
+  string(STRIP "${MYPROJECT_SOURCE_VERSION}" MYPROJECT_SOURCE_VERSION)
+endif()
+
+string(TIMESTAMP MYPROJECT_BUILD_TIME "%H:%M:%S" UTC)
+string(TIMESTAMP MYPROJECT_BUILD_DATE "%d %B %Y" UTC)
+
 # Include directories
 set(MYPROJECT_INCLUDE_DIRS
   "${MYPROJECT_SOURCE_DIR}/Source"
@@ -146,22 +161,6 @@ else()
 
 endif()
 
-# Store the git hash of the current head (not working in top directory)
-#if(EXISTS "${MYPROJECT_SOURCE_DIR}/.git/HEAD")
-#  file(READ "${MYPROJECT_SOURCE_DIR}/.git/HEAD" MYPROJECT_SOURCE_VERSION)
-#  if("${MYPROJECT_SOURCE_VERSION}" MATCHES "^ref:")
-#    string(REGEX REPLACE "^ref: *([^ \n\r]*).*" "\\1"
-#      MYPROJECT_GIT_REF "${MYPROJECT_SOURCE_VERSION}")
-#    file(READ "${MYPROJECT_SOURCE_DIR}/.git/${MYPROJECT_GIT_REF}"
-#      MYPROJECT_SOURCE_VERSION)
-#  endif()
-#  string(STRIP "${MYPROJECT_SOURCE_VERSION}" MYPROJECT_SOURCE_VERSION)
-#endif()
-
-# Not working here????
-#string(TIMESTAMP MYPROJECT_BUILD_TIME "%H:%M:%S" UTC)
-#string(TIMESTAMP MYPROJECT_BUILD_DATE "%d %B %Y" UTC)
-
 if(Module_vtkMYPROJECT)
   set(MYPROJECT_BIN_DIR ${VTK_INSTALL_RUNTIME_DIR})
   set(MYPROJECT_LIB_DIR ${VTK_INSTALL_LIBRARY_DIR})
@@ -225,6 +224,7 @@ if(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400 OR MSVC10)
   add_definitions(-D_SCL_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)
 endif()
 
+# TODO: If this can be avoided when building as a part of VTK 8.9+ (remove this)
 if(NOT MYPROJECT_EXTERNAL_BUILD OR NOT DEFINED VTK_MODULE_ENABLE_VTK_MYPROJECT)
   # The main library, if not handled by the VTK 9 functions
   add_subdirectory(Source)

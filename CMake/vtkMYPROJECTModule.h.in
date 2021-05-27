@@ -1,0 +1,19 @@
+/* Export macros for shared libraries */
+
+#ifndef vtkMYPROJECTModule_h
+#define vtkMYPROJECTModule_h
+
+#include "vtkABI.h"
+#include "vtkMYPROJECTConfig.h"
+
+#if defined(MYPROJECT_BUILD_SHARED_LIBS)
+# if defined(vtkMYPROJECT_EXPORTS)
+#  define VTKMYPROJECT_EXPORT VTK_ABI_EXPORT
+# else
+#  define VTKMYPROJECT_EXPORT VTK_ABI_IMPORT
+# endif
+#else
+# define VTKMYPROJECT_EXPORT
+#endif
+
+#endif

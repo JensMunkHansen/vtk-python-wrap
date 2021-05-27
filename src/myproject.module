@@ -1,0 +1,14 @@
+NAME
+  VTK::MYPROJECT
+LIBRARY_NAME
+  vtkMYPROJECT
+GROUPS
+  StandAlone
+DEPENDS
+  VTK::CommonCore
+  VTK::RenderingCore
+  VTK::InteractionStyle
+PRIVATE_DEPENDS
+  VTK::RenderingOpenGL2
+TEST_DEPENDS
+  VTK::TestingCore

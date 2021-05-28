@@ -11,20 +11,22 @@ Python, but wrapper for TCL and Java has been left out.
 In the VTK source repository, a folder is reserved for remote
 modules, <code>VTK-9.0.1/Remote</code>. To include this module as a remote module, do the following
 
-1. Create a file <code>MyProject.remote.cmake</code> containing the following
+1. Create a file <code>VTK-9.0.1/Remote/MyProject.remote.cmake</code> containing the following
    ```
    #
    # MyProject
    #
    vtk_fetch_module(MyProject
      "Short description of the module"
-     GIT_REPOSITORY https://gitlab.bkmedical.com/MyProject
+     GIT_REPOSITORY https://gitlab.bkmedical.com/MyProject # Replace with location
      # May 28, 2021 v0.7
      GIT_TAG 196f99dbbf52003c52323501081861a909f94301
    )
    ```
 2. When VTK is build, they module vtkMYPROJECT will appear as an option to build and install
+   ```
    cmake .. -DVTK_MODULE_ENABLE_VTK_vtkMYPROJECT=ON
+   ```
 
 I have tested this only using VTK 9.0.1 and only the build phase.
 
@@ -37,8 +39,21 @@ algorithm will be independent of Qt.
 1. Simply run CMake (Python wrapper are enabled by default)
    cmake ..
 
-The solution will contain projects for continous integration, Nightly
-runs, memory check etc. The only projects of interest are
+The solution will contain the projects:
+* ALL_BUILD
+* Continuous
+* Experimental
+* INSTALL
+* MYPROJECT
+* Nightly
+* NightlyMemoryCheck
+* RUN_TESTS
+* TestInteractorStyleGame
+* vtkMYPROJECT-hierarchy
+* vtkMYPROJECTPython
+* ZERO_CHECK
+
+The only projects of interest are
 <code>MYPROJECT</code>, <code>TestInteractorStyleGame</code> and
 <code>vtkMYPROJECTPython</code>. The first project is the module, the
 second is a test project and the last is the wrapper project for

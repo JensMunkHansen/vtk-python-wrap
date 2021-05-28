@@ -12,15 +12,17 @@ In the VTK source repository, a folder is reserved for remote
 modules, <code>VTK-9.0.1/Remote</code>. To include this module as a remote module, do the following
 
 1. Create a file <code>MyProject.remote.cmake</code> containing the following
-   \#
-   \# MyProject
-   \#
+   ```
+   #
+   # MyProject
+   #
    vtk_fetch_module(MyProject
      "Short description of the module"
      GIT_REPOSITORY https://gitlab.bkmedical.com/MyProject
-     \# May 28, 2021 v0.7
+     # May 28, 2021 v0.7
      GIT_TAG 196f99dbbf52003c52323501081861a909f94301
    )
+   ```
 2. When VTK is build, they module vtkMYPROJECT will appear as an option to build and install
    cmake .. -DVTK_MODULE_ENABLE_VTK_vtkMYPROJECT=ON
 
